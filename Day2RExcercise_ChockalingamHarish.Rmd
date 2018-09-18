@@ -1,0 +1,98 @@
+---
+title: "R Day 2"
+author: "Harish Chockalingam"
+date: "9/18/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+here::here("data","gapminder5.csv")
+
+gapminder<- read.csv(here::here("data", "gapminder5.csv"))
+```
+
+## Converting factors to characters
+
+```{r}
+gapminder$country<-as.character(gapminder$country)
+gapminder$continent<-as.character(gapminder$continent)
+str(gapminder)
+```
+
+obs<-nrow(gapminder)
+for (i in obs) {
+  gapminder[i, "gdp"]<-gapminder[i,"pop"]*gapminder[i,"gdpPercap"]
+}
+
+## Creating log variable with for loop
+```{r}
+obs<-nrow(gapminder)
+for(i in obs){
+ gapminder[i,"log_gdpPerCap"]<-log(gapminder[i,"gdpPercap"])
+ gapminder[i,"log_pop"]<-log(gapminder[i,"pop"])
+}
+
+years<-unique(gapminder$year)
+for(i in years){
+  mean_le<-mean(gapminder$lifeExp[gapminder$year==i],na.rm=T)
+  print(paste0(i,": ",mean_le))
+}
+
+conts <- unique(gapminder$continent)
+for (i in conts){
+  mean_le<-mean(gapminder$lifeExp[gapminder$continent==i], na.rm=T)
+  print((i,": ", mean_le))
+}
+
+for(i in conts){
+  print(paste0("Continent: ",i))
+  for(j in years){
+    mean_le<-mean(gapminder$lifeExp[gapminder$continent==i & mean_legapminder$year==j], na.rm=T)
+    print(paste0(j, ": ", mean_le))
+  }
+}
+
+for(i in conts){
+  print(paste0("Continent: ", i))
+  for(j in years){
+    sd_le<-sd(gapminder$lifeExp[gapminder$continent==i & gapminder$year==j],na.rm=T)
+    print(paste0(j,": ", sd_le))
+  }
+}
+
+vars<-gapminder[,c("lifeExp","pop","gdpPercap")]
+apply(vars, 2, mean)
+lapply(gapminder, mean)
+sapply(years,function(x) mean(gapminder$lifeExp[gapminder$year==x]))
+
+i<-1987
+while(i<2003){
+  sd_lf<-sd(gapminder$lifeExp[gapminder$year==i])
+print(paste0(i,": ", sd_lf))
+i<-i+5
+}
+
+```
+for(i in years){
+  if(i>=1987){
+    mean_pop<-mean(gapminder$lifeExp[gapminder$year==i])
+    print(paste0(i,": ", mean_pop))
+  } else {
+      print("Sorry, year is less than 1987")
+      }
+}
+
+reports_m4<-
+function(df, variable, continent){
+  var<-df[[variable]][df$continent==continent]
+  max_le<-max(var)
+  min_le<-min(var)
+  cat("Continent:",continent,
+  "/nMinimum Life expectancy:", min_le,
+  "/nMaximum Life expectancy:", max_le)
+}
+report_stats(gapminder,"lifeExp", "Asia"")
