@@ -1,0 +1,24 @@
+---
+title: "Exercises Day 2 on R"
+author: "Harish Chockalingam"
+date: "9/18/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+here::here("data","gapminder5.csv")
+gapminder<-read.csv(here::here("data","gapminder5.csv"), stringsAsFactors = FALSE)
+
+year<-2012
+if(any(gapminder$year==year)){
+  print(paste("Records(s) for the year", year, "found."))
+} else {
+  print(paste("No records for year",year))
+}
+```
+
+
